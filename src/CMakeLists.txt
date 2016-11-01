@@ -1,0 +1,37 @@
+IF(WIN32)
+    CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
+ELSE(WIN32) 
+    IF(APPLE)
+        CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0 FATAL_ERROR)
+    ELSE(APPLE)
+        CMAKE_MINIMUM_REQUIRED(VERSION 2.4.4 FATAL_ERROR)
+    ENDIF(APPLE)
+ENDIF(WIN32)
+
+IF(COMMAND cmake_policy)
+    CMAKE_POLICY(SET CMP0003 NEW)
+ENDIF()
+
+PROJECT(Qlib)
+
+SET(QLIB_INCLUDE ${PROJECT_SOURCE_DIR}/../include)
+INCLUDE_DIRECTORIES(${QLIB_INCLUDE})
+
+SET(QLIB_SRC exception.c memory.c list.c hash.c string.c 
+             exclude.c stack.c tree.c compress.c sort.c 
+             skiplist.c atomic.c arena.c encrypt.c math.c)
+
+SET(Qlib "qin")
+ADD_LIBRARY(${Qlib} SHARED ${QLIB_SRC})
+
+IF(UNIX)
+    TARGET_LINK_LIBRARIES(${Qlib} m pthread)
+ENDIF(UNIX)
+
+INSTALL(TARGETS ${Qlib}
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/../include/qlib
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+        DIRECTORY_PERMISSIONS PATTERN ".svn" EXCLUDE)
