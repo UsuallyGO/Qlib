@@ -1,6 +1,6 @@
 
-The source code is a user level lib written by Maxwell(qinliok@126.com). I write it mainly for improving my program
-skills and I don't think these code are good enough to be used in anyone's application.
+The source code is a user level lib written by Maxwell(qinliok@126.com). I write it mainly for improving
+my program skills and I don't think these code are good enough to be used in anyone's application.
 
 All my work are only tested in windows(VS2010), MinGW(GCC) and linux(GCC) on X86 machine.
 
