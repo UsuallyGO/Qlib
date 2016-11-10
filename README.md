@@ -25,3 +25,5 @@ Map and Set are should not implemented on list but on RB-Tree.
 Perhaps more search and sort algorithms.
 Perhaps some encrypted algorithms.
 Perhaps some math algorithms ?
+
+Just announce that the red-black is completely wrong in Qlib. So rewrite it in sometime.
