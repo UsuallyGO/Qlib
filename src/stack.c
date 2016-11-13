@@ -27,7 +27,7 @@ void QStack_popAll(QStack *stack)
 
 void QStack_push(QStack *stack, void *elem)
 {
-    assert(stack && elem);
+    assert(stack);
     QList_addHead(&stack->m_list, elem);
 }
 

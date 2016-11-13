@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include "qlib/qmemory.h"
 #include "qlib/qexclude.h"
 
 int main()

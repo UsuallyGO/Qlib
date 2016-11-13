@@ -17,7 +17,7 @@ PROJECT(Qlib)
 SET(QLIB_INCLUDE ${PROJECT_SOURCE_DIR}/../include)
 INCLUDE_DIRECTORIES(${QLIB_INCLUDE})
 
-SET(QLIB_SRC exception.c memory.c list.c hash.c string.c 
+SET(QLIB_SRC graph.c exception.c memory.c list.c hash.c string.c 
              exclude.c stack.c tree.c compress.c sort.c 
              skiplist.c atomic.c arena.c encrypt.c math.c)
 

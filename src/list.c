@@ -32,7 +32,7 @@ static QNode* _NodeCreate(void* data)
 void QList_addHead(QList *list, void *data)
 {
     QNode *node;
-    assert(list && data);
+    assert(list);
 
     node = _NodeCreate(data);
     node->m_next = list->m_head;
@@ -48,7 +48,7 @@ void QList_addHead(QList *list, void *data)
 void QList_addTail(QList *list, void *data)
 {
     QNode *node ;
-    assert(list && data);
+    assert(list);
 
 	node = _NodeCreate(data);
     node->m_prev = list->m_tail;

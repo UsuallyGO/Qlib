@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "qlib/qcompress.h"
 #include "qlib/qgeneral.h"
+#include "qlib/qmemory.h"
 
 void rletest()
 {

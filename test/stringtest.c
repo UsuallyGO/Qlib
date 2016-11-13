@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "qlib/qgeneral.h"
 #include "qlib/qstring.h"
+#include "qlib/qmemory.h"
 
 void kmptest()
 {

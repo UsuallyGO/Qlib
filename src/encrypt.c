@@ -242,7 +242,7 @@ int QDes_keygen(const unsigned char *key)
 }
 
 
-static _des(const unsigned char *source, unsigned char *target, int type)
+static int _des(const unsigned char *source, unsigned char *target, int type)
 {
     unsigned char dupbuf[8];
     unsigned char lblk[6], rblk[6];

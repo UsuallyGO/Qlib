@@ -1,6 +1,9 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <time.h>
+#include <stdlib.h>
+#include "qlib/qmemory.h"
 #include "qlib/qskiplist.h"
 
 int cmp(const void *data1, const void *data2)
