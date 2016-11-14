@@ -17,18 +17,44 @@ QEdge edges[] = {
 };
 
 QEdge edges2[] = {
-		{0, 1, 4},{1, 0, 4},
-		{0, 5, 7},{5, 0, 7},
-		{0, 6, 6},{0, 6, 6},
-		{0, 2, 3},{2, 0, 3},
-		{0, 7, 3},{7, 0, 3},
-		{1, 7, 1},{7, 1, 1},
-		{7, 6, 1},{7, 6, 1},
-		{7, 4, 5},{7, 4, 5},
-		{3, 5, 1},{5, 3, 1},
-		{3, 4, 2},{4, 3, 2},
-		{6, 4, 5},{4, 6, 5},
-		{5, 4, 4},{4, 5, 4},
+	{0, 1, 4}, {1, 0, 4},
+	{0, 5, 7}, {5, 0, 7},
+	{0, 6, 6}, {0, 6, 6},
+	{0, 2, 3}, {2, 0, 3},
+	{0, 7, 3}, {7, 0, 3},
+	{1, 7, 1}, {7, 1, 1},
+	{7, 6, 1}, {7, 6, 1},
+	{7, 4, 5}, {7, 4, 5},
+	{3, 5, 1}, {5, 3, 1},
+	{3, 4, 2}, {4, 3, 2},
+	{6, 4, 5}, {4, 6, 5},
+	{5, 4, 4}, {4, 5, 4},
+};
+
+QEdge edges3[] = {
+	{0, 2, 6},
+	{0, 4, 7},
+	{2, 3, 5},
+	{3, 2, -2},
+	{2, 1, -4},
+	{2, 4, 8},
+	{1, 0, 2},
+	{1, 3, 7},
+	{4, 3, -3},
+	{4, 1, 9},
+};
+
+QEdge edges4[] = {
+	{0, 3, 10},
+	{0, 1, 5},
+	{3, 2, 1},
+	{3, 1, 2},
+	{1, 3, 3},
+	{4, 0, 7},
+	{1, 2, 9},
+	{1, 4, 2},
+	{2, 4, 4},
+	{4, 2, 6},
 };
 
 int main()
@@ -60,7 +86,7 @@ int main()
 		QGraph_insert(g, edges2[i].u, edges2[i].v, edges2[i].w);
 	QGraph_show(g);
 
-	cnt = QGraph_prime(g, 0, &edge);
+	cnt = QGraph_prim(g, 0, &edge);
 	printf("Prime search result:\n");
     for(i = 0; i < cnt; i++)
         printf("%-2d-->%-2d\n", edge[i].u, edge[i].v);
@@ -72,6 +98,30 @@ int main()
         printf("%-2d-->%-2d\n", edge[i].u, edge[i].v);
 	QMem_Free(edge);
 	QGraph_destroy(g);
+
+	g = QGraph_create();
+	for(i = 0; i < sizeof(edges3)/sizeof(QEdge); i++)
+		QGraph_insert(g, edges3[i].u, edges3[i].v, edges3[i].w);
+	QGraph_show(g);
+
+	cnt = QGraph_bellmanford(g, 0, &edge);
+	printf("Bell-man-Ford result:\n");
+	for(i = 0; i < cnt; i++)
+		printf("%-2d-->%-2d:%-2d  Successor:%d\n", 0, edge[i].v, edge[i].w, edge[i].u);
+	QMem_Free(edge);
+	QGraph_destroy(g);
+
+	g = QGraph_create();
+	for(i = 0; i < sizeof(edges4)/sizeof(QEdge); i++)
+		QGraph_insert(g, edges4[i].u, edges4[i].v, edges4[i].w);
+	QGraph_show(g);
+
+	cnt = QGraph_bellmanford(g, 0, &edge);
+	printf("Dijkstra result:\n");
+	for(i = 0; i < cnt; i++)
+		printf("%-2d-->%-2d:%-2d  Successor:%d\n", 0, edge[i].v, edge[i].w, edge[i].u);
+	QMem_Free(edge);
+	QGraph_destroy(g);	
 
 	QMemDumpInfo(0);
 	return 0;

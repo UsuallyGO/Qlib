@@ -11,6 +11,7 @@ Now, it has implemented several dataStructs and algorithms:
 4) Compress and decompress algorithms, RLE and HUFFMAN.
 5) Spinlock in both windows and linux, or more precisely, in VS compiler and GCC compiler.
 6) Sort algorithm, include select/insert/buble/quick/shell sort algorithms, there should be more.
+7) Graph algorithms, include DFS, BFS, Prim, Kruskal, Bell-man-Ford, Dijstra
 
 There are still many works to do, perhaps they are LZ77 compress algorithm, splay tree, Map, Set....
 If you'd like to do code review for me, please let me know, thanks a lot for you....
@@ -27,3 +28,4 @@ Perhaps some encrypted algorithms.
 Perhaps some math algorithms ?
 
 Just announce that the red-black is completely wrong in Qlib. So rewrite it in sometime.
+This README.md is revised in 2016.11.14.

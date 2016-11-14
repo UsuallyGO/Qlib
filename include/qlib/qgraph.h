@@ -26,8 +26,10 @@ QGraph* QGraph_create();
 int QGraph_insert(QGraph* g, int u, int v, int w);
 int QGraph_searchDFS(QGraph *g, int v, QEdge** tr);
 int QGraph_searchBFS(QGraph *g, int v, QEdge** tr);
-int QGraph_prime(QGraph* g, int v, QEdge** tr);
+int QGraph_prim(QGraph* g, int v, QEdge** tr);
 int QGraph_kruskal(QGraph* g, int v, QEdge** tr);
+int QGraph_bellmanford(QGraph *g, int v, QEdge** tr);
+int QGraph_dijkstra(QGraph *g, int v, QEdge** tr);
 void QGraph_destroy(QGraph* g);
 void QGraph_show(QGraph *g);
 

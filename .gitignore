@@ -83,3 +83,6 @@ $RECYCLE.BIN/
 *.lnk
 *.svn-base
 .svn/entries
+.svn/format
+*.db
+.svn/wc.db-journal

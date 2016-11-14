@@ -55,7 +55,7 @@ int QGraph_searchDFS(QGraph *g, int v, QEdge** tr)
 	QStack st;
 	QEdge *edge;
 	int *visit;
-	int cnt, size;
+	int cnt;
 
 	if(g == NULL || tr == NULL || v >= g->vertexs)
 		return 0;
@@ -63,9 +63,8 @@ int QGraph_searchDFS(QGraph *g, int v, QEdge** tr)
 	visit = (int*)QMem_Malloc(g->vertexs*sizeof(int));
 	assert(visit);
 	memset(visit, 0, g->vertexs*sizeof(int));
-	edge = (QEdge*)QMem_Malloc(QGRAPH_DEFAULT_EDGES*sizeof(QEdge));
+	edge = (QEdge*)QMem_Malloc((g->vertexs-1)*sizeof(QEdge));
 	assert(edge);
-	size = QGRAPH_DEFAULT_EDGES;
 	cnt = 0;
 	QStack_init(&st);
 #pragma GCC diagnostic push
@@ -83,12 +82,6 @@ int QGraph_searchDFS(QGraph *g, int v, QEdge** tr)
 		for(i = 0; i < g->vertexs; i++)
 			if(g->matrix[n][i] && !visit[i])
 			{
-				if(cnt >= size)
-				{
-					size *= 2;
-					edge = (QEdge*)QMem_Realloc(edge, size*sizeof(QEdge));
-					assert(edge);
-				}
 				edge[cnt].u = n;
 				edge[cnt].v = i;
 				cnt++;
@@ -112,7 +105,7 @@ int QGraph_searchBFS(QGraph *g, int v, QEdge** tr)
 {
 	QList list;
 	QEdge *edge;
-	int cnt, size;
+	int cnt;
 	int *visit;
 
 	if(g == NULL || v >= g->vertexs || tr == NULL)
@@ -122,10 +115,9 @@ int QGraph_searchBFS(QGraph *g, int v, QEdge** tr)
 	visit = (int*)QMem_Malloc(sizeof(int)*g->gsize);
 	assert(visit);
 	memset(visit, 0, sizeof(int)*g->gsize);
-	edge = (QEdge*)QMem_Malloc(sizeof(QEdge)*QGRAPH_DEFAULT_EDGES);
+	edge = (QEdge*)QMem_Malloc(sizeof(QEdge)*(g->vertexs-1));
 	assert(edge);
 	cnt = 0;
-	size = QGRAPH_DEFAULT_EDGES;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"	
 	QList_addTail(&list, (void*)v);
@@ -145,12 +137,6 @@ int QGraph_searchBFS(QGraph *g, int v, QEdge** tr)
 		for(i = 0; i < g->vertexs; i++)
 			if(g->matrix[n][i] && !visit[i])
 			{
-				if(cnt >= size)
-				{
-					size *= 2;
-					edge = (QEdge*)QMem_Realloc(edge, size*sizeof(QEdge));
-					assert(edge);
-				}
 				edge[cnt].u = n;
 				edge[cnt].v = i;
 				cnt++;
@@ -167,10 +153,10 @@ int QGraph_searchBFS(QGraph *g, int v, QEdge** tr)
 	return cnt;
 }
 
-int QGraph_prime(QGraph* g, int v, QEdge** tr)
+int QGraph_prim(QGraph* g, int v, QEdge** tr)
 {
 	QEdge *edge;
-	int cnt, size;
+	int cnt;
 	int *visit;
 	int *min, *mediate;
 	int v_tmp, i;
@@ -200,10 +186,10 @@ int QGraph_prime(QGraph* g, int v, QEdge** tr)
 		}
 	}
 
-	edge = (QEdge*)QMem_Malloc(sizeof(QEdge)*QGRAPH_DEFAULT_EDGES);
+	edge = (QEdge*)QMem_Malloc((g->vertexs-1)*sizeof(QEdge));
 	assert(edge);
-	memset(edge, 0, QGRAPH_DEFAULT_EDGES*sizeof(QEdge));
-	cnt = 0, size = QGRAPH_DEFAULT_EDGES;
+	memset(edge, 0, (g->vertexs-1)*sizeof(QEdge));
+	cnt = 0;
 	while(cnt < g->vertexs-1)
 	{
 		int min_tmp = INT_MAX;
@@ -212,11 +198,6 @@ int QGraph_prime(QGraph* g, int v, QEdge** tr)
 				v_tmp = i, min_tmp = min[v_tmp];
 
 		v = mediate[v_tmp];
-		if(cnt >= size)
-		{
-			size *= 2;
-			edge = (QEdge*)QMem_Realloc(edge, sizeof(QEdge)*size);
-		}
 		edge[cnt].u = v, edge[cnt].v = v_tmp;
 		edge[cnt].w = min[v_tmp];
 		visit[v_tmp] = 1;
@@ -248,18 +229,21 @@ int QGraph_kruskal(QGraph* g, int v, QEdge** tr)
 {
 	QEdge *edge_tmp, *edge;
 	int *con;
-	int edge_cnt, cnt, size;
+	int edge_cnt, cnt;
 	int i, j;
 	QSort sort;
 
-	edge = (QEdge*)QMem_Malloc(sizeof(QEdge)*QGRAPH_DEFAULT_EDGES);
+	if(g == NULL || v >= g->vertexs || tr == NULL)
+		return QLIB_ERR_INVAL;
+
+	edge = (QEdge*)QMem_Malloc(sizeof(QEdge)*(g->vertexs-1));
 	assert(edge);
 	edge_tmp = (QEdge*)QMem_Malloc(g->edges*sizeof(QEdge));
 	assert(edge_tmp);
 	con = (int*)QMem_Malloc(g->vertexs*sizeof(int));
 	assert(con);
 
-	edge_cnt = 0, cnt = 0, size = QGRAPH_DEFAULT_EDGES;
+	edge_cnt = 0, cnt = 0;
 	for(i = 0; i < g->vertexs; i++)
 		con[i] = -i-1;//avoid for 0
 	for(i = 0; i < g->vertexs; i++)
@@ -287,12 +271,6 @@ int QGraph_kruskal(QGraph* g, int v, QEdge** tr)
 
 		if(con[edge_tmp[i].u] != con[edge_tmp[i].v])
 		{
-			if(cnt >= size)
-			{
-				size *= 2;
-				edge = (QEdge*)QMem_Realloc(edge, size*sizeof(QEdge));
-				assert(edge);
-			}
 			edge[cnt] = edge_tmp[i];
 			if(edge_tmp[i].v > 0)
 				con[edge_tmp[i].u] = con[edge_tmp[i].v];
@@ -321,6 +299,111 @@ Err_edges:
 	QMem_Free(edge_tmp);
 	QMem_Free(con);
 	return QLIB_ERR_INVAL;
+}
+
+int QGraph_bellmanford(QGraph *g, int v, QEdge** tr)
+{
+	QEdge *edge;
+	int index,i,j;
+
+	if(g == NULL || v >= g->vertexs || tr == NULL)
+		return QLIB_ERR_INVAL;
+
+	edge = (QEdge*)QMem_Malloc((g->vertexs)*sizeof(QEdge));
+	assert(edge);
+
+	for(index = 0; index< g->vertexs; index++)
+	{
+		edge[index].u = v;
+		edge[index].v = index;
+		edge[index].w = INT_MAX;
+	}
+	edge[v].w = 0;
+
+	for(index = 0; index < g->vertexs - 1; index++)
+	{
+		for(i = 0; i < g->vertexs; i++)
+			for(j = 0; j <g->vertexs; j++)
+			{
+				if(g->matrix[i][j] && edge[i].w != INT_MAX
+					&& edge[j].w > (edge[i].w + g->matrix[i][j]))
+				{
+					edge[j].w = edge[i].w + g->matrix[i][j];
+					edge[j].u = i;
+				}
+			}
+	}
+
+	for(i = 0; i < g->vertexs; i++)
+		for(j = 0; j < g->vertexs; j++)
+		{
+			if(g->matrix[i][j] && edge[i].w != INT_MAX
+				&& edge[j].w > (edge[i].w + g->matrix[i][j]))
+			{
+				*tr = NULL;
+				return QLIB_ERR_DONE;
+			}
+		}
+
+	*tr = edge;
+	return g->vertexs;
+}
+
+int QGraph_dijkstra(QGraph *g, int v, QEdge** tr)
+{
+	QEdge *edge;
+	int *visit;
+	int cnt, i, j, min_v;
+
+	visit = (int*)QMem_Malloc(sizeof(int)*g->vertexs);
+	assert(visit);
+	edge = (QEdge*)QMem_Malloc(sizeof(QEdge)*g->vertexs);
+	assert(visit);
+	memset(visit, 0, sizeof(int)*g->vertexs);
+	visit[v] = 1;
+
+	for(i = 0; i < g->vertexs; i++)
+	{
+		edge[i].u = v;
+		edge[i].v = i;
+		if(g->matrix[v][i])
+			edge[i].w = g->matrix[v][i];
+		else
+			edge[i].w = INT_MAX;
+	}
+	edge[v].w = 0;
+
+	if(v != 0)//min_v can be arbitray value exclude for v
+		min_v = 0;
+	else
+		min_v = g->vertexs - 1;
+
+	cnt = 1;
+	while(cnt < g->vertexs)//v is already visited
+	{
+		for(i = 0; i < g->vertexs; i++)
+		{
+			if(!visit[i] && edge[i].w < edge[min_v].w)
+				min_v = i;
+		}
+
+		visit[min_v] = 1;
+		cnt++;
+
+		for(i = 0; i < g->vertexs; i++)
+		{
+			if(g->matrix[min_v][i] && edge[min_v].w != INT_MAX
+				&& edge[i].w > (edge[min_v].w + g->matrix[min_v][i]))
+			{
+				edge[i].u = min_v;
+				edge[i].v = i;
+				edge[i].w = edge[min_v].w + g->matrix[min_v][i];
+			}
+		}
+	}
+
+	*tr = edge;
+	return cnt;
 }
 
 void QGraph_destroy(QGraph* g)
